@@ -1,0 +1,59 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site1.master.cs" Inherits="ADO.Site1" %>
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+    <title></title>
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div>
+            <table>
+                <tr>
+                    <td>
+                        <asp:Label ID="EmpNM" runat="server" Text="Employee Name"></asp:Label>
+                    </td>
+                    <td>
+                        <asp:TextBox ID="txtEmpNM" runat="server"></asp:TextBox>
+                        <asp:RequiredFieldValidator ID="ReqEmpNM" runat="server" ForeColor="Red" Display="Dynamic" ErrorMessage="Employee's name is required" ControlToValidate="txtEmpNM"></asp:RequiredFieldValidator>
+                        <asp:RegularExpressionValidator ID="RegexEmpNM" runat="server" ForeColor="Red" Display="Dynamic" ErrorMessage="Employee's name is invalid"  ControlToValidate="txtEmpNM" ValidationExpression="[a-z]{1,10}"></asp:RegularExpressionValidator>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <asp:Label ID="Gender" runat="server" Text="Gender"></asp:Label>
+                    </td>
+                    <td>
+                        <asp:DropDownList ID="txtGender" runat="server">
+                            <asp:ListItem Selected="True">Male</asp:ListItem>
+                            <asp:ListItem>Female</asp:ListItem>
+                        </asp:DropDownList>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <asp:Label ID="Salary" runat="server" Text="Salary"></asp:Label>
+                    </td>
+                    <td>
+                        <asp:TextBox ID="txtSalary" runat="server"></asp:TextBox>
+                        <asp:RequiredFieldValidator ID="ReqTxtSalary" runat="server" ForeColor="Red" Display="Dynamic" ErrorMessage="Employee's salary is required" ControlToValidate="txtSalary"></asp:RequiredFieldValidator>
+                        <asp:CompareValidator runat="server" Operator="DataTypeCheck" Type="Double" ControlToValidate="txtSalary" ForeColor="Red" Display="Dynamic" ErrorMessage="Salary must be a number"></asp:CompareValidator>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <asp:Button ID="btnSubmit" runat="server" Text="Submit" OnClick="btnSubmit_Click" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div>
+            <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+            </asp:ContentPlaceHolder>
+        </div>
+    </form>
+</body>
+</html>
