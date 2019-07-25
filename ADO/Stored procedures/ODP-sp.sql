@@ -50,3 +50,42 @@ begin
     preturnmess:= sqlcode || ' : ' || sqlerrm;
 end;
 select * from tblemployees;
+
+--Delete sp
+create or replace procedure spEMPLOYEE_d
+(pEMP_ID in tblemployees.employeeid%type,
+preturncode out number,
+preturnmess out varchar2)
+as
+begin
+    delete tblemployees where EmployeeID = pEMP_ID;
+    preturncode := sql%rowcount;
+    preturnmess := 'Succeeded';
+    
+    exception when others then
+    rollback;
+    preturncode :=-1;
+    preturnmess:= sqlcode || ' : ' || sqlerrm;
+end;
+
+--Update sp
+create or replace procedure spEMPLOYEE_u
+(pEMP_ID in tblemployees.employeeid%type,
+pEMP_NAME in tblemployees.name%type,
+pEMP_GENDER in tblemployees.gender%type,
+pEMP_SALARY in tblemployees.salary%type,
+preturncode out number,
+preturnmess out varchar2)
+as
+begin
+    update tblemployees set name = pEMP_NAME, gender = pEMP_GENDER, salary = pEMP_SALARY where employeeid = pEMP_ID;
+    commit;
+    preturncode := sql%rowcount;
+    preturnmess := 'Update succeeded';
+    
+    exception
+    when others then
+    rollback;
+    preturncode := -1;
+    preturnmess := sqlcode || ' : ' || sqlerrm;
+end;

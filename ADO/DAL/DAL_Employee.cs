@@ -150,5 +150,94 @@ namespace ADO.DAL
             strReturnMess = parra[4].Value.ToString();
             return i;
         }
+        public static int deleteEmployeeORCL(Employee emp, ref string strReturnCode, ref string strReturnMess)
+        {
+            int result = 1;
+            connORCL.Open();
+            OracleCommand cmd = new OracleCommand("spEmployee_d", connORCL);
+            cmd.CommandType = CommandType.StoredProcedure;
+            OracleParameter[] parra = new OracleParameter[3];
+            parra[0] = new OracleParameter("pEMP_ID", OracleDbType.Int64);
+            parra[0].Direction = ParameterDirection.Input;
+            parra[0].Value = emp.EMP_ID;
+            parra[1] = new OracleParameter("preturncode", OracleDbType.Int64);
+            parra[1].Direction = ParameterDirection.Output;
+            parra[1].Value = DBNull.Value;
+            parra[2] = new OracleParameter("preturnmess", OracleDbType.NVarchar2, 255);
+            parra[2].Direction = ParameterDirection.Output;
+            parra[2].Value = DBNull.Value;
+            foreach(OracleParameter p in parra)
+            {
+                cmd.Parameters.Add(p);
+            }
+            try
+            {
+                cmd.ExecuteNonQuery();
+            }
+            catch(Exception ex)
+            {
+                result = 0;
+                throw (ex);
+            }
+            connORCL.Close();
+            strReturnCode = parra[1].Value.ToString();
+            strReturnMess = parra[2].Value.ToString();
+            return result;
+        }
+        public static int updateEmployeeORCL(Employee emp, ref string strReturnCode, ref string strReturnMess)
+        {
+            int result = 1;
+            connORCL.Open();
+            OracleCommand cmd = new OracleCommand("spEmployee_u", connORCL);
+            cmd.CommandType = CommandType.StoredProcedure;
+            OracleParameter[] parra = new OracleParameter[6];
+            parra[0] = new OracleParameter("pEMP_ID", OracleDbType.Int64)
+            {
+                Direction = ParameterDirection.Input,
+                Value = emp.EMP_ID
+            };
+            parra[1] = new OracleParameter("pEMP_NAME", OracleDbType.NVarchar2, 255)
+            {
+                Direction = ParameterDirection.Input,
+                Value = emp.EMP_NAME
+            };
+            parra[2] = new OracleParameter("pEMP_GENDER", OracleDbType.NVarchar2, 255)
+            {
+                Direction = ParameterDirection.Input,
+                Value = emp.EMP_GENDER
+            };
+            parra[3] = new OracleParameter("pEMP_SALARY", OracleDbType.Int32)
+            {
+                Direction = ParameterDirection.Input,
+                Value = Int32.Parse(emp.EMP_SALARY)
+            };
+            parra[4] = new OracleParameter("preturncode", OracleDbType.Int64)
+            {
+                Direction = ParameterDirection.Output,
+                Value = DBNull.Value
+            };
+            parra[5] = new OracleParameter("preturnmess", OracleDbType.NVarchar2, 255)
+            {
+                Direction = ParameterDirection.Output,
+                Value = DBNull.Value
+            };
+            foreach (OracleParameter p in parra)
+            {
+                cmd.Parameters.Add(p);
+            }
+            try
+            {
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                result = 0;
+                throw (ex);
+            }
+            connORCL.Close();
+            strReturnCode = parra[1].Value.ToString();
+            strReturnMess = parra[2].Value.ToString();
+            return result;
+        }
     }
 }

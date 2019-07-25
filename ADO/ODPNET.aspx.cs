@@ -21,6 +21,7 @@ namespace ADO
             if(!Page.IsPostBack)
             {
                 loadEmployee();
+                Session["action"] = "Insert";
             }
         }
 
@@ -41,21 +42,37 @@ namespace ADO
             string strReturnCode = "";
             string strReturnMess = "";
             int result;
-            Employee emp = new Employee(0, txtEmpNM.Text.Trim(), txtGender.Text.Trim(), txtSalary.Text.Trim());
+            Employee emp = new Employee(int.Parse(Session["EMP_ID"].ToString()), txtEmpNM.Text.Trim(), txtGender.Text.Trim(), txtSalary.Text.Trim());
             if (!chk.checkValue(emp, "Insert"))
             {
                 Mess.Text = "Invalid value";
                 return;
             }
-            result = busE.insertEmployeeORCL(emp, ref strReturnCode, ref strReturnMess);
-            if (result == 0)
+            if(Session["action"].ToString()=="Insert")
             {
-                Mess.Text = strReturnMess;
+                result = busE.insertEmployeeORCL(emp, ref strReturnCode, ref strReturnMess);
+                if (result == 0)
+                {
+                    Mess.Text = strReturnMess;
+                }
+                else
+                {
+                    Mess.Text = "Insert succeeded";
+                    loadEmployee();
+                }
             }
-            else
+            else if(Session["action"].ToString()=="Update")
             {
-                Mess.Text = "Insert succeeded";
-                loadEmployee();
+                result = busE.updateEmployeeORCL(emp, ref strReturnCode, ref strReturnMess);
+                if (result == 0)
+                {
+                    Mess.Text = strReturnMess;
+                }
+                else
+                {
+                    Mess.Text = "Update succeeded";
+                    loadEmployee();
+                }
             }
         }
 
@@ -70,12 +87,44 @@ namespace ADO
             txtSalary.Text = "";
             Mess.Text = "";
             txtGender.Text = "Choose gender";
-            loadEmployee();
+            
         }
 
         protected void btnReset_Click(object sender, EventArgs e)
         {
             Reset();
+            loadEmployee();
+        }
+
+        protected void dtg_EditCommand(object source, DataGridCommandEventArgs e)
+        {
+            Reset();
+            Session["EMP_ID"] = e.Item.Cells[1].Text;
+            Session["action"] = "Update";
+            btnSubmit.Text = "Update";
+            Mess.Text = e.Item.Cells[1].Text;
+            txtEmpNM.Text = e.Item.Cells[2].Text;
+            txtGender.Text = e.Item.Cells[3].Text;
+            txtSalary.Text = e.Item.Cells[4].Text;
+        }
+
+        protected void dtg_DeleteCommand(object source, DataGridCommandEventArgs e)
+        {
+            string strReturnCode = "";
+            string strReturnMess = "";
+            int result = 0;
+            Employee emp = new Employee();
+            emp.EMP_ID = int.Parse(e.Item.Cells[1].Text);
+            result = busE.deleteEmployeeORCL(emp, ref strReturnCode, ref strReturnMess);
+            if (result == 0)
+            {
+                Mess.Text = strReturnMess;
+            }
+            else
+            {
+                Mess.Text = "Delete succeeded";
+                loadEmployee();
+            }
         }
     }
 }

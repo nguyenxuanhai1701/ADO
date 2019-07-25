@@ -58,7 +58,7 @@
                 </tr>
             </table>
             <div>
-                <asp:DataGrid ID="dtg" runat="server" AutoGenerateColumns="false">
+                <asp:DataGrid ID="dtg" runat="server" AutoGenerateColumns="false" OnEditCommand="dtg_EditCommand" OnDeleteCommand="dtg_DeleteCommand">
                     <Columns>
                         <asp:TemplateColumn HeaderText="STT">
                             <ItemTemplate>
@@ -69,10 +69,24 @@
                         <asp:BoundColumn DataField="Name" HeaderText="Name" ReadOnly="true"></asp:BoundColumn>
                         <asp:BoundColumn DataField="Gender" HeaderText="Gender" ReadOnly="true"></asp:BoundColumn>
                         <asp:BoundColumn DataField="Salary" HeaderText="Salary" ReadOnly="true"></asp:BoundColumn>
+                        <asp:EditCommandColumn ButtonType="PushButton" HeaderText="Select" EditText="Select"></asp:EditCommandColumn>
+                        <asp:TemplateColumn HeaderText="Delete">
+                            <ItemTemplate>
+                                <asp:ImageButton ID="btnDel" runat="server" ImageUrl="~/Images/delete_icon.png"  CommandName="Delete" OnClientClick="return confirm_delete()"/>
+                            </ItemTemplate>
+                        </asp:TemplateColumn>
                     </Columns>
                 </asp:DataGrid>
             </div>
         </div>
     </form>
+    <script type="text/javascript">
+        function confirm_delete() {
+            if (confirm('Do you want to delete?') == true)
+                return true;
+            else
+                return false;
+        }
+    </script>
 </body>
 </html>

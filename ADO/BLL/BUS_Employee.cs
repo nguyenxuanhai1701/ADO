@@ -38,5 +38,13 @@ namespace ADO.BLL
         {
             return DAL_Employee.insertEmployeeORCL(emp, ref strReturnCode, ref strReturnMess);
         }
+        public int deleteEmployeeORCL(Employee emp, ref string strReturnCode, ref string strReturnMess)
+        {
+            return DAL_Employee.deleteEmployeeORCL(emp, ref strReturnCode, ref strReturnMess);
+        }
+        public int updateEmployeeORCL(Employee emp, ref string strReturnCode, ref string strReturnMess)
+        {
+            return DAL_Employee.updateEmployeeORCL(emp, ref strReturnCode, ref strReturnMess);
+        }
     }
 }
